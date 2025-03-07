@@ -28,5 +28,6 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh token
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),  # Verificar token
     path("admin/", admin.site.urls),
-    path("api/v1/", include("usuario.urls"))
+    path("api/v1/", include("usuario.urls")),
+    path("api/v1/produto/", include("produto.urls"))
 ]

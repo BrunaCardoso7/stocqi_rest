@@ -19,5 +19,5 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class UsuarioInfoSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Usuario
-        fields = ['username', 'email', 'phone']
+        fields = ['nome', 'descricao', 'phone']
 

@@ -17,7 +17,14 @@ class UsuarioView(viewsets.GenericViewSet):
             return UsuarioInfoSerializer
     def get_queryset(self):
         return Usuario.objects.all() 
-    
+    def get_permissions(self):
+        if self.action == "signup":
+            return [AllowAny()]  
+        elif self.action == "list":
+            return [IsAuthenticated()]  
+        elif self.action == "retrieve":
+            return [IsAuthenticated()]  
+        return super().get_permissions()
     def signup (self, request):
         user_serializer = self.get_serializer(data=request.data)
         if user_serializer.is_valid():
@@ -25,14 +32,7 @@ class UsuarioView(viewsets.GenericViewSet):
             print(user)
             return Response(user_serializer.data, status=status.HTTP_201_CREATED)
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    def get_permissions(self):
-            if self.action == "signup":
-                return [AllowAny()]  
-            elif self.action == "list":
-                return [IsAuthenticated()]  
-            elif self.action == "retrieve":
-                return [IsAuthenticated()]  
-            return super().get_permissions()
+
     def retrieve(self, request, id):
         try:
             user =  Usuario.objects.get(id=id)
