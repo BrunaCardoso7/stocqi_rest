@@ -15,7 +15,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
         )
         return user
     
-    
 class UsuarioInfoSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Usuario

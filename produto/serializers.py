@@ -5,20 +5,39 @@ from produto.models import Produto
 class CreateProdutoSerializer(serializers.ModelSerializer):
     class Meta:
         model=Produto
-        fields = '__all__'
+        fields = [
+            'id',  
+            'nome',
+            'descricao',
+            'beneficios',
+            'modo_de_uso',
+            'especificacao',
+            'indicacao',
+            'garatia_de_qualidade',
+            'preco_estimado',
+            'preco',
+            'user',
+        ]
+
     def create(self, validated_data):
         return Produto.objects.create(**validated_data)
     
-    # end def
-class ListProdutoSerializer:
-    model=Produto   
-    fields = "__all__"  
-class ListByIdProdutoSerializer:
-    model=Produto   
-    fields = "__all__"
-class UpdateByIdProdutoSerializer:
-    model=Produto   
-    fields = "__all__"
-class DeleteByIdProdutoSerializer:
-    model=Produto   
-    fields = "__all__"
+class ListProdutoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Produto   
+        fields = "__all__"  
+        
+class ListByIdProdutoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Produto   
+        fields = "__all__"
+    
+class UpdateByIdProdutoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Produto   
+        fields = "__all__"
+        
+class DeleteByIdProdutoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Produto   
+        fields = "__all__"
