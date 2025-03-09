@@ -1,12 +1,10 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from produto.models import Produto
 from produto.serializers import CreateProdutoSerializer, ListProdutoSerializer
 
 class ProdutoViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-
     def get_serializer_class(self):
         if self.action == 'create':
             return CreateProdutoSerializer
@@ -21,6 +19,14 @@ class ProdutoViewSet(viewsets.ModelViewSet):
         if produto_id:
             return Produto.objects.filter(produto_id=produto_id)
         return Produto.objects.all()
+    def get_permissions(self):
+            if self.action == "create":
+                return [IsAuthenticated()]  
+            elif self.action == "list":
+                return [AllowAny()]  
+            elif self.action == "retrieve":
+                return [AllowAny()]  
+            return super().get_permissions()
 
     def create(self, request, *args, **kwargs):
         """
