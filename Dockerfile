@@ -1,23 +1,31 @@
-# Usa uma imagem base do Python (versão recomendada)
-FROM python:3.10-slim
+FROM python:3.11-slim
 
-# Define o diretório de trabalho
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE=core.settings
+
 WORKDIR /app
 
-# Copia o arquivo requirements.txt
-COPY requirements.txt .
+# Install PostgreSQL client and build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    postgresql-client \
+    libpq-dev \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Instala as dependências
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copia todo o conteúdo do projeto
-COPY . .
+# Copy project files
+COPY . /app/
 
-# Define o PYTHONPATH para incluir o diretório do projeto
-ENV PYTHONPATH=/app
+# Set up entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-# Expõe a porta 8000
 EXPOSE 8000
 
-# Comando para rodar a aplicação
-CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]

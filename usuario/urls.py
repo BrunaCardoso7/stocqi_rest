@@ -5,7 +5,6 @@ urlpatterns = [
     path("auth/", UsuarioView.as_view(
         {
             'post': 'signup',
-            # 'get': 'getAll'
         }
     ), name="user"),
     path("user/", UsuarioView.as_view(

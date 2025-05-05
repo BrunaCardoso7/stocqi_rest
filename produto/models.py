@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.db import models
 import uuid
-from avaliacao.models import Avaliacao
-
 # Create your models here.
 class Produto(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
